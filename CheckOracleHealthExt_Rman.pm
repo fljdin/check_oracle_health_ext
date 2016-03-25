@@ -73,22 +73,22 @@ sub nagios {
     
     if ($params{mode} =~ /my::rman::full/ and $type eq "DB_FULL") {
       $bkpfound = 1;
-	  $self->add_perfdata(sprintf "\'%s_output\'=%d%s;%.2f", lc $type, $output / $factor, $units, $ratio);
-	  $self->add_perfdata(sprintf "\'%s_duration\'=%dsec", lc $type, $duration);
+	  $self->add_perfdata(sprintf "\'backup_output\'=%d%s;'ratio'=%.2f", $output / $factor, $units, $ratio);
+	  $self->add_perfdata(sprintf "\'backup_duration\'=%dmin", $duration / 60);
       $self->add_nagios(
         $self->check_thresholds($hours_in_past, 30, 50),
         sprintf "Last full backup : %s", $latest_end);
     } elsif ($params{mode} =~ /my::rman::incr/ and $type eq "DB_INC") {
       $bkpfound = 1;
-	  $self->add_perfdata(sprintf "\'%s_output\'=%d%s;%.2f", lc $type, $output / $factor, $units, $ratio);
-	  $self->add_perfdata(sprintf "\'%s_duration\'=%dsec", lc $type, $duration);
+	  $self->add_perfdata(sprintf "\'backup_output\'=%d%s;'ratio'=%.2f", $output / $factor, $units, $ratio);
+	  $self->add_perfdata(sprintf "\'backup_duration\'=%dmin", $duration / 60);
       $self->add_nagios(
         $self->check_thresholds($hours_in_past, 30, 50),
         sprintf "Last incr backup : %s", $latest_end);
-    } elsif ($params{mode} =~ /my::rman::arch/ and $type eq "ARCH") {      
+    } elsif ($params{mode} =~ /my::rman::arch/ and $type eq "ARCH") {
       $bkpfound = 1;
-	  $self->add_perfdata(sprintf "\'%s_output\'=%d%s;%.2f", lc $type, $output / $factor, $units, $ratio);
-	  $self->add_perfdata(sprintf "\'%s_duration\'=%dsec", lc $type, $duration);
+	  $self->add_perfdata(sprintf "\'backup_output\'=%d%s;'ratio'=%.2f", $output / $factor, $units, $ratio);
+	  $self->add_perfdata(sprintf "\'backup_duration\'=%dsec", $duration);
       $self->add_nagios(
         $self->check_thresholds($mins_in_past, 120, 180),
         sprintf "Last arch backup : %s", $latest_end);
@@ -96,7 +96,7 @@ sub nagios {
   }
   
   if ( ! $bkpfound ) {
-    $self->add_nagios_ok("No backup found");
+    $self->add_nagios_critical("No backup found");
   }
 }
 
