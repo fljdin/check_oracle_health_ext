@@ -5,7 +5,8 @@ Some specifics extensions
   * Database global size (used and allocated)
   * Job state (retry or broken)
   * Locked sessions
-  * RMAN backup history
+  * RMAN backup history from controlfile
+  * RMAN backup history from Catalog
 
 How to compile
 
@@ -14,3 +15,8 @@ How to compile
     ./configure --prefix=/usr/lib/nagios --with-mymodules-dir=/usr/lib/nagios/downloads/ext
     make
     make install
+
+Prerequisites for Catalog plugin
+
+    GRANT select ON <rman>.rc_backup_set_details TO nagios;
+    CREATE SYNONYM nagios.rc_backup_set_details FOR rman.rc_backup_set_details;
