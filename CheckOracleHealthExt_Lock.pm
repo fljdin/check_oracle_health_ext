@@ -66,7 +66,7 @@ sub nagios {
       my($sessions, $block, $duration) = @{$_};
       $self->add_nagios(
         $self->check_thresholds($duration, 15, 30),
-        sprintf "%s %s locks detected since %s minutes", $sessions, $block > 0 ? "blocking" : "non-blocking", $sessions);
+        sprintf "%s %s locks detected since %s minutes", $sessions, $block > 0 ? "blocking" : "non-blocking", $duration);
       $nb_locks++;
     }
     if ($nb_locks == 0) {
