@@ -27,8 +27,8 @@ sub init {
     }
   } elsif ($params{mode} =~ /my::lock::duration/) {
     my @results = $self->{handle}->fetchall_array(q{
-      select count(sid) sessions, block, max(round(ctime/60)) duration 
-        from gv$lock where type = 'TX' and lmode > 0 group by block
+      select count(sid) sessions, case when block > 0 then 1 else 0 end block, max(round(ctime/60)) duration 
+        from gv$lock where type = 'TX' and lmode > 0 group by case when block > 0 then 1 else 0 end
     });
     my $count = 0;
     foreach (@results) {
